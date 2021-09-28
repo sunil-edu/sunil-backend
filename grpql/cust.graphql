@@ -1,0 +1,116 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+
+# Define an object type and map it later to the generated Ent model.
+# https://graphql.org/learn/schema/#object-types-and-fields
+
+interface Node{
+    id: ID!
+}
+
+"""
+Define a Relay Cursor type:
+https://relay.dev/graphql/connections.htm#sec-Cursor
+
+"""
+scalar Cursor
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: Cursor
+  endCursor: Cursor
+}
+
+type MstCustomerConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  edges: [MstCustomerEdge]
+}
+
+type MstCustomerEdge {
+  node: MstCustomer
+  cursor: Cursor!
+}
+
+
+"""The following enums are matched the entgql annotations in the ent/schema."""
+enum MstCustomerOrderField {
+  CUSTDET
+  CUSTCODE
+  CUSTADDR
+  CUSTPLACE
+  CUSTCONTACT
+  CUSTTEL
+  CUSTEMAIL
+  CUSTURL
+  CUSTBANNER1
+  CUSTBANNER2
+  CUSTLOGOURL
+}
+
+
+enum OrderDirection {
+  ASC
+  DESC
+}
+
+
+input  MstCustomerOrder {
+  direction: OrderDirection!
+  field: MstCustomerOrderField
+}
+
+type MstCustomer implements Node {
+    id: ID!
+    CustDet:        String!			
+    CustCode:       String!			
+    CustAddr:       String!			
+    CustPlace:      String!			
+    CustContact:    String!			
+    CustTel:        String!			
+    CustEmail:      String!			
+    CustUrl:        String!			
+    CustBanner1:    String!		
+    CustBanner2:    String!			
+    CustLogoUrl:    String!			
+}
+
+# Define an input type for the mutation below.
+# https://graphql.org/learn/schema/#input-types
+
+input MstCustomerInput {
+    CustDet:        String!			
+    CustCode:       String!			
+    CustAddr:       String!			
+    CustPlace:      String!			
+    CustContact:    String!			
+    CustTel:        String!			
+    CustEmail:      String!			
+    CustUrl:        String!			
+    CustBanner1:    String!			
+    CustBanner2:    String!			
+    CustLogoUrl:    String!			
+}
+
+
+
+"""Define a query for getting all todos and support the Node interface."""
+type Query {
+  ListCustomer(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: MstCustomerOrder): MstCustomerConnection
+  node(id: ID!): Node
+  nodes(ids: [ID!]!): [Node]!
+}
+
+
+
+# Define a mutation for creating MstCustomers.
+# https://graphql.org/learn/queries/#mutations
+
+
+  type Mutation {
+  AddCustomer(input: MstCustomerInput!): MstCustomer!
+ 
+  }
